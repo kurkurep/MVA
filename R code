@@ -1,0 +1,93 @@
+library(ggplot2)
+library(knitr)
+library(cluster)
+library(HSAUR)
+library(fpc)
+library(lattice)
+library(rpart)
+library(kernlab)
+library(randomForest)
+install.packages("MVA")
+library(MVA)
+
+bank_final <- read.csv("C:/Users/priya/Documents/bank-additional-full1.csv")
+bank_final
+head(bank_final)
+dim(bank_final)
+str(bank_final)
+summary(bank_final) #summary 
+colSums(is.na(bank_final)) #search for missing values per column
+colnames(bank_final)
+
+# Converting into numeric
+bank_final$age <- as.numeric(bank_final$age)
+bank_final$duration <- as.numeric(bank_final$duration)
+bank_final$campaign <- as.numeric(bank_final$campaign)
+bank_final$pdays <- as.numeric(bank_final$pdays)
+bank_final$previous <- as.numeric(bank_final$previous)
+bank_final$emp.var.rate <- as.numeric(bank_final$emp.var.rate)
+bank_final$cons.price.idx <- as.numeric(bank_final$cons.price.idx)
+bank_final$cons.conf.idx <- as.numeric(bank_final$cons.conf.idx)
+bank_final$euribor3m <- as.numeric(bank_final$euribor3m)
+bank_final$nr.employed <- as.numeric(bank_final$nr.employed)
+summary(bank_final)
+
+sapply(bank_final, class)  #finding out the class of each variable 
+
+#To find the outliers Plot histogram
+hist(bank_final$age, col=terrain.colors(10)) 
+#
+
+#Diff between mean and median in summary, if outliers are present 
+boxplot(bank_final$age, main="Age Box plot",yaxt="n", xlab="Age", horizontal=TRUE,col=terrain.colors(2))
+#
+
+#
+qplot(bank_final$pdays,bank_final$duration,data=bank_final,colour=y,size=3)
+#
+
+# Plotting a Histogram through ggplot
+ggplot(bank, aes(campaign)) + geom_histogram(alpha = 0.6, fill = "#5dc3f8", color = "white", bins = 50)
+#
+
+# Ploting factor (marital) against y
+y_marital = data.frame(table(bank_final$marital, bank_final$y))
+y_marital$percent = ifelse(y_marital$Var2=="yes",round((y_marital$Freq[(nrow(y_marital)/2+1):nrow(y_marital)]/sum(y_marital$Freq[(nrow(y_marital)/2+1):nrow(y_marital)]))*100,1),round((y_marital$Freq[1:(nrow(y_marital)/2)]/sum(y_marital$Freq[1:(nrow(y_marital)/2)]))*100,1))
+y_marital$label = paste0(y_marital$Freq,"(",y_marital$percent,"%)")
+
+ggplot(y_marital, aes(x = Var2, y = percent, fill = Var1, label = label)) + geom_bar(stat = "identity") + geom_text(position = position_stack(vjust=0.5))
+#
+
+# 
+mlab = "Age of the Customer"
+plab = "Amenities the customer has"
+with(bank_final, plot(age, housing, xlab = mlab, ylab = plab, cex.lab = 0.9))
+with(bank_final, chiplot(age, housing))
+plot(age, duration, pch=c(1,16)[as.numeric(y)],xlab="Age",ylab="Duration")     
+#
+
+# Plotting Box plot for few variables
+boxplot(bank_final$age, main="Age Box plot",yaxt="n", xlab="Age", horizontal=TRUE)
+boxplot(bank_final$euribor3m, main="Euribor3m Box plot",yaxt="n", xlab="euribor3m", horizontal=TRUE)
+boxplot(bank_final$duration, main="Duration Box plot",yaxt="n", xlab="Duration", horizontal=TRUE)
+#
+
+#
+bank_int=bank_final[c(11:14)]
+pairs(bank_int, labels=c("Duration","Campaign","pdays","previous"),pch=c(1,16)[as.numeric(bank$y)],font.labels=2)
+#
+
+# Plotting Pair panels
+library(psych)
+pairs.panels(bank_final[,c(1:8,21)])
+pairs.panels(bank_final[,c(9:21)])
+#
+
+# Plotting a 3D Scatterplot
+library(scatterplot3d)
+s3d <- scatterplot3d(bank_final$age,bank_final$duration,bank_final$campaign,pch=c(1,16)[as.numeric(bank_final$y)],xlab="Age", ylab="Duration", angle=45,zlab="Campaign", lty.hide=2,type="h",y.margin.add=0.1,font.axis=2,font.lab=2)
+#
+
+# Plotting a scatter plot with linear fit
+pairs(bank_final, panel = function (x, y, ...) {points(x, y, ...);abline(lm(y ~ x), col = "grey")}, pch = ".", cex = 1.5)
+#
