@@ -1,3 +1,4 @@
+# Installing various libraries 
 library(ggplot2)
 library(knitr)
 library(cluster)
@@ -10,16 +11,21 @@ library(randomForest)
 install.packages("MVA")
 library(MVA)
 
+# Reading the dataset
 bank_final <- read.csv("C:/Users/priya/Documents/bank-additional-full1.csv")
 bank_final
 head(bank_final)
+
+# Calculating the dimensions and summary
 dim(bank_final)
 str(bank_final)
 summary(bank_final) #summary 
-colSums(is.na(bank_final)) #search for missing values per column
+
+# Searching for missing values per column
+colSums(is.na(bank_final)) 
 colnames(bank_final)
 
-# Converting into numeric
+# Converting factor into numeric
 bank_final$age <- as.numeric(bank_final$age)
 bank_final$duration <- as.numeric(bank_final$duration)
 bank_final$campaign <- as.numeric(bank_final$campaign)
@@ -40,15 +46,29 @@ hist(bank_final$age, col=terrain.colors(10))
 
 #Diff between mean and median in summary, if outliers are present 
 boxplot(bank_final$age, main="Age Box plot",yaxt="n", xlab="Age", horizontal=TRUE,col=terrain.colors(2))
-#
 
-#
+
+# Qplot
 qplot(bank_final$pdays,bank_final$duration,data=bank_final,colour=y,size=3)
-#
+
+
+# library(ggplot2)
+ggplot(bank_final,aes(x=bank_final$age,fill=bank_final$y)) + geom_histogram(binwidth=1) + labs(y= "Count", x="Age", title = "Age")
+ggplot(bank_final, aes(x=bank_final$job,fill=bank$y)) + geom_bar()+labs(y= "Count", x="Job", title = "Job")
+ggplot(bank_final, aes(x=bank_final$marital,fill=bank_final$y)) + geom_bar() + labs(y= "Count", x="Marital", title = "Marital")
+ggplot(bank_final, aes(x=bank_final$education,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Education", title = "Education")
+ggplot(bank_final, aes(x=bank_final$default,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Contact", title = "Contact")
+ggplot(bank_final, aes(x=bank_final$housing,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Contact", title = "Contact")
+ggplot(bank_final, aes(x=bank_final$contact,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Contact", title = "Contact")
+ggplot(bank_final, aes(x=bank_final$loan,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Laon", title = "Loan")
+ggplot(bank_final, aes(x=bank_final$month,fill=bank_final$y)) + geom_bar()+labs(y= "Count", x="Month", title = "Month")
+ggplot(bank_final, aes(x=bank_final$day_of_week,fill=bank_final$y)) + geom_bar()+ labs(y= "Count", x="Day of week", title = "Day of week")
+ggplot(bank_final, aes(x=bank_final$poutcome,fill=bank_final$y)) + geom_bar() + labs(y= "Count", x="poutcome", title = "Poutcome")
+
 
 # Plotting a Histogram through ggplot
 ggplot(bank, aes(campaign)) + geom_histogram(alpha = 0.6, fill = "#5dc3f8", color = "white", bins = 50)
-#
+
 
 # Ploting factor (marital) against y
 y_marital = data.frame(table(bank_final$marital, bank_final$y))
@@ -56,38 +76,54 @@ y_marital$percent = ifelse(y_marital$Var2=="yes",round((y_marital$Freq[(nrow(y_m
 y_marital$label = paste0(y_marital$Freq,"(",y_marital$percent,"%)")
 
 ggplot(y_marital, aes(x = Var2, y = percent, fill = Var1, label = label)) + geom_bar(stat = "identity") + geom_text(position = position_stack(vjust=0.5))
-#
 
-# 
+
+# Chiplot
 mlab = "Age of the Customer"
 plab = "Amenities the customer has"
 with(bank_final, plot(age, housing, xlab = mlab, ylab = plab, cex.lab = 0.9))
 with(bank_final, chiplot(age, housing))
 plot(age, duration, pch=c(1,16)[as.numeric(y)],xlab="Age",ylab="Duration")     
-#
 
-# Plotting Box plot for few variables
+
+# Plotting Box plot for checking outliers
 boxplot(bank_final$age, main="Age Box plot",yaxt="n", xlab="Age", horizontal=TRUE)
 boxplot(bank_final$euribor3m, main="Euribor3m Box plot",yaxt="n", xlab="euribor3m", horizontal=TRUE)
 boxplot(bank_final$duration, main="Duration Box plot",yaxt="n", xlab="Duration", horizontal=TRUE)
-#
 
-#
+
+# Correlation Analysis
 bank_int=bank_final[c(11:14)]
 pairs(bank_int, labels=c("Duration","Campaign","pdays","previous"),pch=c(1,16)[as.numeric(bank$y)],font.labels=2)
-#
+
 
 # Plotting Pair panels
 library(psych)
 pairs.panels(bank_final[,c(1:8,21)])
 pairs.panels(bank_final[,c(9:21)])
-#
+
 
 # Plotting a 3D Scatterplot
 library(scatterplot3d)
 s3d <- scatterplot3d(bank_final$age,bank_final$duration,bank_final$campaign,pch=c(1,16)[as.numeric(bank_final$y)],xlab="Age", ylab="Duration", angle=45,zlab="Campaign", lty.hide=2,type="h",y.margin.add=0.1,font.axis=2,font.lab=2)
-#
+
 
 # Plotting a scatter plot with linear fit
 pairs(bank_final, panel = function (x, y, ...) {points(x, y, ...);abline(lm(y ~ x), col = "grey")}, pch = ".", cex = 1.5)
+
+# Diagonal boxplot
+library(SciViews)
+bank_final_int=bank_final[c(11:14)]
+pairs(bank_final, labels=c("duration","Campaign","pdays","previous"),font.labels=2)
+
+
+# Bvplot
+bank_final_age_dur=data.frame(bank_final$age, bank_final$duration)
+bvbox(bank_final, mtitle = "", xlab = mlab, ylab = plab)
+
+y_int=ifelse(bank_final$y=='no', 0, 1)
+
+plot(bank_final$age, bank_final$duration, pch=c(1,16)[y_int],xlab="Age",ylab="Duration")
+plot(bank_final$age, bank_final$campaign, pch=c(1,16)[y_int],xlab="Age", ylab="Campaign")
 #
+
