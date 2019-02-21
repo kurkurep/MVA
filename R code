@@ -1,3 +1,6 @@
+ EXPLORATION AND VISUALIZATION
+
+
 # Installing various libraries 
 library(ggplot2)
 library(knitr)
