@@ -1,0 +1,93 @@
+# TESTS
+
+# Hotelling's T2 test. Comparing multivariate means between survivor and non-survivor sparrows
+install.packages("Hotelling")
+library(Hotelling)
+t2testsparr <- hotelling.test(nr.employed + pdays + duration + campaign ~ job, data=bank_final)
+# Output of the function hotelling.test is given
+cat("T2 statistic =",t2testsparr$stat[[1]],"\n")
+print(t2testsparr)
+#  T2 statistic is located in the first element of the list "stat"
+View(t2testsparr)
+
+# Converting variable education into numeric
+
+#unknown = 0 ,student=1, unemployed=2, housemaid=3
+#self-employed 4, entrepreneur 5, retired 6, management 7,services 8 , technician 9
+# admin 11   blue-collar    10               
+bank_final_job= ifelse(bank_final$job== 'admin.', 11,
+                 ifelse(bank_final$job=='blue-collar', 10,
+                        ifelse(bank_final$job=='technician',9,
+                               ifelse(bank_final$job=='services',8,
+                                      ifelse(bank_final$job=='management',7,
+                                             ifelse(bank_final$job=='retired',6,
+                                                    ifelse(bank_final$job=='entrepreneur',5,
+                                                           ifelse(bank_final$job=='self-employed',4,
+                                                                  ifelse(bank_final$job=='housemaid',3,
+                                                                         ifelse(bank_final$job=='unemployed',2,
+                                                                                ifelse(bank_final$job=='student',1,0)))))))))))
+
+
+bank_final_job
+bank_final_education
+
+summary(marital)
+
+# Converting month into numeric
+bank_final_month=ifelse(bank_final$month=='mar',3,
+                  ifelse(bank_final$month=='apr',4,
+                         ifelse(bank_final$month=='may',5,
+                                ifelse(bank_final$month=='jun',6,
+                                       ifelse(bank_final$month=='jul',7,
+                                              ifelse(bank_final$month=='aug',8,
+                                                     ifelse(bank_final$month=='sep',9,
+                                                            ifelse(bank_final$month=='oct',10,
+                                                                   ifelse(bank_final$month=='nov',11,
+                                                                          ifelse(bank_final$month=='dec',12,0))))))))))
+
+bank_final_month 
+
+# Converting day of the week variable into numeric
+bank_final_days=ifelse(bank_final$day_of_week=='mon',1,
+                 ifelse(bank_final$day_of_week=='tue',2,
+                        ifelse(bank_final$day_of_week=='wed',3,
+                               ifelse(bank_final$day_of_week=='thu',4,
+                                      ifelse(bank_final$day_of_week=='fri',5,0)))))
+
+bank_final_days
+
+
+# Converting variable loan into numeric
+bank_final_loan= ifelse(loan=='yes',1,0)
+
+bank_final_loan
+
+
+# Converting contact variable into numeric
+bank_final_contact=ifelse(bank_final$contact=='cellular',2,1)
+bank_final_modified=cbind(bank_fianl_modified,bank_final_contact)
+
+bank_final_contact
+ 
+# Converting variable housing into numeric
+bank_final_housing = ifelse(bank_final$housing=='yes',1,0)
+
+bank_final_housing
+
+# Converting marital into numeric
+bank_final_marital=ifelse(bank_final$marital=='married',3,
+                    ifelse(bank_final$marital=='single',2,
+                           ifelse(bank_final$marital=='divorced',1,0)))
+
+# Binding all the converted variables
+bankf_updated=cbind(bankf_updated,bank_final_housing)
+bankf_updated=cbind(bankf_updated,bank_final_contact)
+bankf_updated=cbind(bankf_updated,bank_final_days)
+bankf_updated=cbind(bankf_updated,bank_final_month)
+bankf_updated=cbind(bankf_updated,bank_final_loan)
+bankf_updated=cbind(bankf_updated,bank_final_job)
+bankf_updated=cbind(bankf_updated,bank_final_education)
+bankf_updated=cbind(bankf_updated,bank_final_marital)
+
+View(bankf_updated)
+
