@@ -91,3 +91,28 @@ bankf_updated=cbind(bankf_updated,bank_final_marital)
 
 View(bankf_updated)
 
+# Performing t-test
+t.test(bankf_updated$bank_final_month[bankf_updated$y=='yes'],bankf_updated$bank_final_month[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_marital[bankf_updated$y=='yes'],bankf_updated$bank_final_marital[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_education[bankf_updated$y=='yes'],bankf_updated$bank_final_education[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_loan[bankf_updated$y=='yes'],bankf_updated$bank_final_loan[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_job[bankf_updated$y=='yes'],bankf_updated$bank_final_job[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_contact[bankf_updated$y=='yes'],bankf_updated$bank_final_contact[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_age[bankf_updated$y=='yes'],bankf_updated$bank_final_age[bankf_updated$y=='no'],var.equal=TRUE)
+t.test(bankf_updated$bank_final_duration[bankf_updated$y=='yes'],bankf_updated$bank_final_duration[bankf_updated$y=='no'],var.equal=TRUE)
+
+
+# Performing levenes test  
+leveneTest(age ~ y, data = bankf_updated)
+leveneTest(duration ~ y, data = bankf_updated)
+@
+leveneTest(married ~ y, data = bankf_updated)
+leveneTest(single ~ y, data = bankf_updated)
+leveneTest(divorced ~ y, data = bankf_updated)
+@
+leveneTest(bank_final_contact ~ y, data = bankf_updated)
+leveneTest(bank_final_job ~ y, data = bankf_updated)
+leveneTest(bank_final_loan ~ y, data = bankf_updated)
+leveneTest(bank_final_education ~ y, data = bankf_updated)
+leveneTest(bank_final_month ~ y, data = bankf_updated)
+
