@@ -97,7 +97,7 @@ boxplot(bank_final$duration, main="Duration Box plot",yaxt="n", xlab="Duration",
 
 # Correlation Analysis
 bank_int=bank_final[c(11:14)]
-pairs(bank_int, labels=c("Duration","Campaign","pdays","previous"),pch=c(1,16)[as.numeric(bank$y)],font.labels=2)
+pairs(bank_int, labels=c("Duration","Campaign","pdays","previous"),pch=c(1,16)[as.numeric(bank_final$y)],font.labels=2)
 
 
 # Plotting Pair panels
