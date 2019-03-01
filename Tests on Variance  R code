@@ -1,4 +1,4 @@
-# TESTS
+# PERFORMING TESTS (variance)
 
 # Hotelling's T2 test. Comparing multivariate means between survivor and non-survivor sparrows
 install.packages("Hotelling")
